@@ -19,33 +19,18 @@
   },
   "homepage": "https://github.com/Jeremy38100/GreenhouseIOTServer#readme",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "chai": "^3.5.0",
-    "express": "^4.14.0",
+    "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "express": "^4.16.4",
     "http": "0.0.0",
     "moment": "^2.22.2",
     "mongoose": "^4.7.0",
-    "nexmo": "^2.0.2",
-    "node-oauth2-server": "^2.4.0",
+    "mqtt": "^2.18.8",
     "q": "^1.4.1",
-    "request": "^2.81.0",
+    "request": "^2.88.0",
     "sha1": "^1.1.1",
     "socket.io": "^2.1.1",
     "underscore": "^1.8.3",
     "winston": "^2.3.0"
-  },
-  "devDependencies": {
-    "browserify": "8.1.3",
-    "chai": "^3.4.1",
-    "connect-livereload": "0.5.2",
-    "jasmine-core": "2.2.0",
-    "karma": "0.12.31",
-    "karma-cli": "0.0.4",
-    "karma-coverage": "0.2.7",
-    "karma-jasmine": "0.3.5",
-    "karma-phantomjs-launcher": "0.1.4",
-    "mocha": "2.3.3",
-    "run-sequence": "1.0.2",
-    "tiny-lr": "0.1.5"
   }
 }

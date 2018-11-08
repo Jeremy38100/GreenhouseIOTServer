@@ -7,5 +7,10 @@ module.exports = {
     password 	: process.env.MONGO_PASSWORD || null,
     port 		: process.env.MONGO_PORT || '27017',
     dbName 		: process.env.MONGO_DBNAME || 'greenhouseiot'
+  },
+  mqtt : {
+    method: 'tcp',
+    host: '152.77.47.50',
+    port: 6883
   }
 };
