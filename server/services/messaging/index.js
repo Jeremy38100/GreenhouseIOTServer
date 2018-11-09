@@ -96,4 +96,4 @@ class SocketService {
   }
 }
 
-module.exports = new SocketService();
+module.exports = SocketService;

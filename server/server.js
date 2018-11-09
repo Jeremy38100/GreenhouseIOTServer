@@ -8,8 +8,8 @@ const mongoose      = require('mongoose');
 const provider      = require('./provider');
 const logger        = require('./logger');
 const config        = require('./config');
-const messaging     = require('./services/messaging');
-const mqtt          = require('./services/mqtt');
+const Messaging     = require('./services/messaging');
+const MQTT          = require('./services/mqtt');
 const Q             = require('q');
 
 var boot = function (config) {
@@ -27,9 +27,11 @@ var boot = function (config) {
       app.set('port', config.port);
 
       require('./routes')(app, mongoose);
-
+      
+      const messaging = new Messaging();
       messaging.listen(serverExpress);
-      mqtt.listen();
+      const mqttInstance = new MQTT(messaging);
+      mqttInstance.listen();
 
       let port = app.get('port');
 

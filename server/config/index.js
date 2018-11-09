@@ -8,9 +8,18 @@ module.exports = {
     port 		: process.env.MONGO_PORT || '27017',
     dbName 		: process.env.MONGO_DBNAME || 'greenhouseiot'
   },
-  mqtt : {
+  mqttProd : {
     method: 'tcp',
     host: '152.77.47.50',
-    port: 6883
+    port: 6883,
+    mainTopic: 'etud21/data/#',
+    dataTopic: 'etud21/data'
+  },
+  mqttLocal : {
+    method: 'tcp',
+    host: '127.0.0.1',
+    port: 1883,
+    mainTopic: 'etud21/data/#',
+    dataTopic: 'etud21/data'
   }
 };
