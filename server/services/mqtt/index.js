@@ -21,9 +21,7 @@ class MQTT {
           logger.error("Mqtt client could not subscribe to the topic " + config.mqttProd.mainTopic, err);
         }
         // Uncomment this lines if you want to test the publish method with the socket
-        // this.publishEach(5000, {
-        //   humidity: Math.round(Math.random() * 30 + 30)
-        // });
+        this.publishEach(5000);
       });
     });
     this.client.on('message', (topic, message) => {
@@ -40,8 +38,15 @@ class MQTT {
   onMessage(topic, message) {
     logger.info("Message received on topic : " + topic);
     logger.info(JSON.parse(message));
+    let splittedTopic = topic.split('/');
+    let jsonMessage = JSON.parse(message);
+    let deviceData = {
+      deviceId: splittedTopic[0],
+      sensor: splittedTopic[3],
+      data: jsonMessage
+    };
     this.ws.connections.forEach(connection => {
-      this.ws.send(connection.socket, JSON.stringify(JSON.parse(message)));
+      this.ws.send(connection.socket, JSON.stringify(deviceData));
     });
   }
 
@@ -55,10 +60,11 @@ class MQTT {
     clearInterval(this.interval);
   }
 
-  publishEach(seconds, data) {
+  publishEach(seconds) {
     this.interval = setInterval(() => {
-      console.log("Publish");
-      this.client.publish(config.mqttProd.dataTopic + '/humidite/humidity', JSON.stringify(data));
+      this.client.publish(config.mqttProd.dataTopic + '/humidite/humidity', JSON.stringify({
+        humidity: Math.round(Math.random() * 30 + 30)
+      }));
     }, seconds);
   }
 
