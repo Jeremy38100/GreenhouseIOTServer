@@ -23,7 +23,7 @@ class MQTT {
           logger.error("Mqtt client could not subscribe to the topic " + config.mqttProd.mainTopic, err);
         }
         // Uncomment this lines if you want to test the publish method with the socket
-        // this.publishEach(5000);
+        this.publishEach(60000);
       });
     });
     this.client.on('message', (topic, message) => {
