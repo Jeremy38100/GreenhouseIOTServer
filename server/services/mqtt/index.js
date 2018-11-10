@@ -42,17 +42,21 @@ class MQTT {
     logger.info(JSON.parse(message));
     let splittedTopic = topic.split('/');
     let jsonMessage = JSON.parse(message);
-    let deviceData = {
-      deviceId: splittedTopic[0],
-      sensor: splittedTopic[3],
-      data: jsonMessage
-    };
-    this.deviceDataCtrl.insertPromise(deviceData).then(res => {
-      logger.info("Successfully saved device data");
-    });
-    this.ws.connections.forEach(connection => {
-      this.ws.send(connection.socket, JSON.stringify(deviceData));
-    });
+    if (Object.keys(jsonMessage).length > 0) {
+      let deviceData = {
+        deviceId: splittedTopic[0],
+        sensor: splittedTopic[3],
+        data: jsonMessage
+      };
+      this.deviceDataCtrl.insertPromise(deviceData).then(res => {
+        logger.info("Successfully saved device data");
+      });
+      this.ws.connections.forEach(connection => {
+        this.ws.send(connection.socket, JSON.stringify(deviceData));
+      });
+    } else {
+      logger.warn("No data received");
+    }
   }
 
   onError(error) {
