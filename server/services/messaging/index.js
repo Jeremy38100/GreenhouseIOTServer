@@ -6,8 +6,9 @@ const _ = require('underscore');
 const OPCODES = require('./opcodes');
 
 class SocketService {
-  constructor() {
+  constructor(mongoose) {
     this.connections = [];
+    this.mongoose = mongoose;
   }
 
   listen(serverInstance) {

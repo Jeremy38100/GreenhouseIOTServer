@@ -28,9 +28,9 @@ var boot = function (config) {
 
       require('./routes')(app, mongoose);
       
-      const messaging = new Messaging();
+      const messaging = new Messaging(mongoose);
       messaging.listen(serverExpress);
-      const mqttInstance = new MQTT(messaging);
+      const mqttInstance = new MQTT(messaging, mongoose);
       mqttInstance.listen();
 
       let port = app.get('port');

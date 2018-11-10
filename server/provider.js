@@ -18,13 +18,13 @@ module.exports = function(host, port, dbName, user, password, done) {
   if (user) {
     if (password) {
       logger.info('DbURI: mongodb://'+ user + ':' + password + '@' +host+':'+port+'/'+dbName);
-      mongoose.createConnection('mongodb://'+ user + ':' + password + '@' +host+':'+port+'/'+dbName, done);
+      mongoose.connect('mongodb://'+ user + ':' + password + '@' +host+':'+port+'/'+dbName, done);
     } else {
       logger.info('DbURI: mongodb://'+ user + '@' +host+':'+port+'/'+dbName);
-      mongoose.createConnection('mongodb://'+ user + '@' +host+':'+port+'/'+dbName, done);
+      mongoose.connect('mongodb://'+ user + '@' +host+':'+port+'/'+dbName, done);
     }
   } else {
     logger.info('DbURI: mongodb://'+host+':'+port+'/'+dbName);
-    mongoose.createConnection('mongodb://'+host+':'+port+'/'+dbName, done);
+    mongoose.connect('mongodb://'+host+':'+port+'/'+dbName, done);
   }
 };

@@ -4,12 +4,14 @@ const mqtt = require('mqtt');
 const logger = require('../../logger');
 const _ = require('underscore');
 const config = require('../../config');
+const DeviceDataCtrl = require('../../entities/devicedata/controller');
 
 class MQTT {
   
-  constructor(ws) {
+  constructor(ws, mongoose) {
     this.ws = ws;
     this.interval = null;
+    this.deviceDataCtrl = new DeviceDataCtrl(mongoose);
   }
 
   listen() {
@@ -45,6 +47,9 @@ class MQTT {
       sensor: splittedTopic[3],
       data: jsonMessage
     };
+    this.deviceDataCtrl.insertPromise(deviceData).then(res => {
+      logger.info("Successfully saved device data");
+    });
     this.ws.connections.forEach(connection => {
       this.ws.send(connection.socket, JSON.stringify(deviceData));
     });

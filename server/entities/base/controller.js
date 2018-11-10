@@ -11,8 +11,8 @@ class EntityBase {
   }
 
   all(cb) {
-    logger.debug("[" + this.name + ".baseController] find all");
-    this.dao.all((err, entities) => {
+    logger.info("[" + this.name + ".baseController] find all");
+    this.find(null, (err, entities) => {
       if (err) cb(err);
       cb(null, entities);
     });
@@ -110,26 +110,30 @@ class EntityBase {
     logger.debug("[" + this.name + ".baseController] afterUpdate");
   }
 
+  afterInsert(doc) {
+    logger.debug("[" + this.name + ".baseController] afterInsert");
+  }
+
   beforeInsert(entity, cb) {
     logger.debug("[" + this.name + ".baseController] beforeInsert");
     cb(null, entity);
   }
 
-  afterInsert(doc) {
-    logger.debug("[" + this.name + ".baseController] afterInsert");
-  }
-
   insert(entity, cb) {
+    logger.info("[" + this.name + ".controller] insert");
+    logger.info(entity);
+    let instance = new this.dao(entity);
     this.beforeInsert(entity, (err, res) => {
       if (err) cb(err, 400);
       else {
         logger.debug("[" + this.name + ".controller] insert");
         logger.debug(entity);
         var instance = new this.dao(entity);
-        instance.save(instance, (err, doc) => {
-          if (err) cb(err, 400);
-          this.afterInsert(doc);
-          cb(null, doc);
+        instance.save().then((res) => {
+          console.log(res);
+          cb(null, res);
+        }, (err) => {
+          cb(err);
         });
       }
     });

@@ -9,24 +9,6 @@ const path            = require('path');
 
 module.exports = function(app, db) {
 
-  if(process.env.NODE_ENV != "production" && process.env.NAME != "development") {
-    // those files won't be affected by the middleware placed after those lines of code
-    logger.info("- local environment -");
-    logger.info("setting up static files");
-
-    app.use('/bower_components', express.static(path.join(__dirname, '/../../pickeat-admin/bower_components')));
-    app.use('/',                 express.static(path.join(__dirname, '/../../pickeat-admin/app')));
-  }
-
-  if (process.env.NAME != "production" && process.env.NAME != "development") {
-    app.use('/',                  express.static(path.join(__dirname, '../../pickeat-admin/app')));
-    app.use('/bower_components',  express.static(path.join(__dirname, '../../pickeat-admin/bower_components')));
-  } else {
-    app.get('/', (req, res, next) => {
-      return res.status(200).send("OK");
-    })
-  }
-
   app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -41,10 +23,6 @@ module.exports = function(app, db) {
 			next();
 		}
 	});
-
-  app.use('/api', (req, res, next) => {
-    next();
-  });
 
   const Main = require('./entities/main.router');
 

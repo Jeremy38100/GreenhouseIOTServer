@@ -10,6 +10,11 @@ class Router {
   }
 
   init(db) {
+    let DeviceData    = require('./devicedata/routes'   );
+
+    let deviceData  = new DeviceData(db);
+
+    this.router.use('/deviceData',  deviceData.router   );
 
   }
 
