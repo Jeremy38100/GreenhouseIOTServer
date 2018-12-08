@@ -31,15 +31,16 @@ class RoutesTestBase {
     .send(body)
     .end((err, res) => {
 
-      if (err) return cb(err);
-
-      expect(err).to.be.null;
-      expect(res).to.not.be.null;
-      expect(res.status).to.equal(200);
-      expect(res.body).to.not.be.null;
-      expect(res.body._id).to.not.be.null;
-
-      cb(null, res);
+      if (err) return cb(err, null);
+      else {
+        expect(err).to.be.null;
+        expect(res).to.not.be.null;
+        expect(res.status).to.equal(200);
+        expect(res.body).to.not.be.null;
+        expect(res.body._id).to.not.be.null;
+  
+        cb(null, res);
+      }
 
     });
   }

@@ -122,7 +122,7 @@ class EntityBase {
   insert(entity, cb) {
     logger.info("[" + this.name + ".controller] insert");
     this.beforeInsert(entity, (err, res) => {
-      if (err) cb(err, 400);
+      if (err) cb(err, null);
       else {
         logger.debug("[" + this.name + ".controller] insert");
         logger.debug(entity);
@@ -139,7 +139,7 @@ class EntityBase {
   insertPromise(entity) {
     let q = Q.defer();
     this.beforeInsert(entity, (err, res) => {
-      if (err) q.reject(err, 400);
+      if (err) q.reject(err, null);
       else {
         logger.debug("[" + this.name + ".controller] insert");
         logger.debug(entity);

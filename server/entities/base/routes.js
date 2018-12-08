@@ -3,6 +3,8 @@
 const express      = require('express');
 const _            = require('underscore');
 const logger       = require('../../logger');
+const Q            = require('q');
+const mongoose     = require('mongoose');
 
 class RouteBase {
   constructor(db) {
@@ -106,16 +108,22 @@ class RouteBase {
         return response.status(400).send(err);
       }
       else {
+        let promises = [];
         entities.forEach((entity) => {
-          this.ctrl.insert(entity, (err, res) => {
-            if (err) {
-              logger.error(err);
-              return response.status(err.code || 500).send(err);
-            } else {
-              logger.info({"response" : "ok", "code" : 200});
-              return response.status(200).send(res);
-            }
-          });
+          promises.push(this.ctrl.insertPromise(entity));
+        });
+        Q.all(promises)
+        .then((res) => {
+          logger.info({"response" : "ok", "code" : 200});
+          return response.status(200).send(res);
+        })
+        .catch(err => {
+          logger.error(err);
+          let code = 500;
+          if (err.name && err.name === 'ValidatorError') {
+            code = 400;
+          }
+          return response.status(code || err.code || 500).send(err);
         });
       }
     });

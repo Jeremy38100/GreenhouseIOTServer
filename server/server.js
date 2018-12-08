@@ -29,7 +29,7 @@ var boot = function (config) {
       require('./routes')(app, mongoose);
       
       messaging.listen(serverExpress).then(() => {
-        MQTT.listen(messaging.wss).then(() => {
+        MQTT.listen(messaging).then(() => {
           let port = app.get('port');
   
           serverExpress.listen(port, () => {

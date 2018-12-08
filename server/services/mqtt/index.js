@@ -27,7 +27,7 @@ class MQTT {
             logger.error("Mqtt client could not subscribe to the topic " + config.mqttProd.mainTopic, err);
           }
           // Uncomment this lines if you want to test the publish method with the socket
-          // this.publishEach(60000);
+          // this.publishEach(60);
         });
       });
       this.client.on('message', (topic, message) => {
@@ -85,7 +85,7 @@ class MQTT {
       this.client.publish(config.mqttProd.dataTopic + '/humidite/humidity', JSON.stringify({
         humidity: Math.round(Math.random() * 30 + 30)
       }));
-    }, seconds);
+    }, seconds * 1000); // Convert seconds into milliseconds
   }
 
   close() {

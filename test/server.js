@@ -40,7 +40,7 @@ describe('#server', () => {
     let messaging = require('../server/services/messaging');
     let mqtt = require('../server/services/mqtt');
     expect(mqtt.ws).to.not.be.null;
-    expect(messaging.wss).to.be.equal(mqtt.ws);
+    expect(messaging).to.be.equal(mqtt.ws);
 
     done();
   });
