@@ -12,7 +12,7 @@ class DeviceData extends RouteBase {
   }
 
   get() {
-    this.router.get('/', (req, response, next) =>       { this.getHandle(req, response);      });
+    super.get();
     this.router.get('/last', (req, response, next) =>   { this.getLastHandle(req, response);  });
   }
 

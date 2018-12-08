@@ -1,6 +1,7 @@
 'use strict';
 
 const mqtt = require('mqtt');
+const mongoose = require('mongoose');
 const logger = require('../../logger');
 const _ = require('underscore');
 const config = require('../../config');
@@ -8,32 +9,41 @@ const DeviceDataCtrl = require('../../entities/devicedata/controller');
 
 class MQTT {
   
-  constructor(ws, mongoose) {
-    this.ws = ws;
+  constructor() {
     this.interval = null;
     this.deviceDataCtrl = new DeviceDataCtrl(mongoose);
   }
 
-  listen() {
-    this.client = mqtt.connect(config.mqttProd.method + "://" + config.mqttProd.host + ":" + config.mqttProd.port);
-    this.client.on('connect', () => {
-      logger.info("MQTT connected");
-      this.client.subscribe(config.mqttProd.mainTopic, (err) => {
-        if (err) {
-          logger.error("Mqtt client could not subscribe to the topic " + config.mqttProd.mainTopic, err);
-        }
-        // Uncomment this lines if you want to test the publish method with the socket
-        // this.publishEach(60000);
+  listen(ws) {
+    return new Promise((resolve, reject) => {
+      this.firstMessageReceived = false;
+      this.ws = ws;
+      this.client = mqtt.connect(config.mqttProd.method + "://" + config.mqttProd.host + ":" + config.mqttProd.port);
+      this.client.on('connect', () => {
+        resolve()
+        logger.info("MQTT connected");
+        this.client.subscribe(config.mqttProd.mainTopic, (err) => {
+          if (err) {
+            logger.error("Mqtt client could not subscribe to the topic " + config.mqttProd.mainTopic, err);
+          }
+          // Uncomment this lines if you want to test the publish method with the socket
+          // this.publishEach(60000);
+        });
       });
-    });
-    this.client.on('message', (topic, message) => {
-      this.onMessage(topic, message);
-    });
-    this.client.on('err', (err) => {
-      this.onError(err);
-    });
-    this.client.on('close', () => {
-      this.onClose();
+      this.client.on('message', (topic, message) => {
+        if (this.firstMessageReceived) {
+          this.onMessage(topic, message);
+        } else {
+          this.firstMessageReceived = true;
+        }
+      });
+      this.client.on('err', (err) => {
+        this.onError(err);
+        reject(err);
+      });
+      this.client.on('close', () => {
+        this.onClose();
+      });
     });
   }
   
@@ -78,6 +88,14 @@ class MQTT {
     }, seconds);
   }
 
+  close() {
+    return new Promise((resolve, reject) => {
+      this.client.end(true, () => {
+        resolve();
+      });
+    });
+  }
+
 }
 
-module.exports = MQTT;
+module.exports = new MQTT();

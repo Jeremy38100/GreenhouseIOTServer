@@ -121,8 +121,6 @@ class EntityBase {
 
   insert(entity, cb) {
     logger.info("[" + this.name + ".controller] insert");
-    logger.info(entity);
-    let instance = new this.dao(entity);
     this.beforeInsert(entity, (err, res) => {
       if (err) cb(err, 400);
       else {
@@ -130,7 +128,6 @@ class EntityBase {
         logger.debug(entity);
         var instance = new this.dao(entity);
         instance.save().then((res) => {
-          console.log(res);
           cb(null, res);
         }, (err) => {
           cb(err);

@@ -6,16 +6,19 @@ const _ = require('underscore');
 const OPCODES = require('./opcodes');
 
 class SocketService {
-  constructor(mongoose) {
+  constructor() {
     this.connections = [];
-    this.mongoose = mongoose;
   }
 
   listen(serverInstance) {
-    this.wss = new io(serverInstance);
-    logger.info('socket initializing');
-    this.wss.on('connection', (ws) => {
-      this.onConnection(ws);
+    return new Promise((resolve, reject) => {
+      this.wss = new io(serverInstance);
+
+      logger.info('socket initializing');
+      this.wss.on('connection', (ws) => {
+        this.onConnection(ws);
+      });
+      resolve();
     });
   }
 
@@ -97,4 +100,4 @@ class SocketService {
   }
 }
 
-module.exports = SocketService;
+module.exports = new SocketService();

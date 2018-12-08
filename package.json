@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/Jeremy38100/GreenhouseIOTServer#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "body-parser": "^1.18.3",
-    "chai": "^4.2.0",
     "express": "^4.16.4",
     "http": "0.0.0",
     "moment": "^2.22.2",
@@ -32,5 +32,10 @@
     "socket.io": "^2.1.1",
     "underscore": "^1.8.3",
     "winston": "^2.3.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }

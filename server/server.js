@@ -8,7 +8,7 @@ const mongoose      = require('mongoose');
 const provider      = require('./provider');
 const logger        = require('./logger');
 const config        = require('./config');
-const Messaging     = require('./services/messaging');
+const messaging     = require('./services/messaging');
 const MQTT          = require('./services/mqtt');
 const Q             = require('q');
 
@@ -28,16 +28,21 @@ var boot = function (config) {
 
       require('./routes')(app, mongoose);
       
-      const messaging = new Messaging(mongoose);
-      messaging.listen(serverExpress);
-      const mqttInstance = new MQTT(messaging, mongoose);
-      mqttInstance.listen();
-
-      let port = app.get('port');
-
-      serverExpress.listen(port, () => {
-        logger.info('server listening on ' + config.host + ':' + app.get('port'));
-        deferred.resolve(serverExpress);
+      messaging.listen(serverExpress).then(() => {
+        MQTT.listen(messaging.wss).then(() => {
+          let port = app.get('port');
+  
+          serverExpress.listen(port, () => {
+            logger.info('server listening on ' + config.host + ':' + app.get('port'));
+            deferred.resolve(serverExpress);
+          });
+        })
+        .catch(err => {
+          logger.error(err);
+        });
+      })
+      .catch(err => {
+        logger.error(err);
       });
 
     }
@@ -47,6 +52,7 @@ var boot = function (config) {
 
 let shutdown = () => {
   let q = Q.defer();
+  MQTT.close().then(() => {});
   messaging.close();
   serverExpress.close(() => {
     logger.info('server stopped listening');
