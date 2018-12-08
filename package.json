@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/Jeremy38100/GreenhouseIOTServer#readme",
   "dependencies": {
-    "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "http": "0.0.0",
