@@ -82,19 +82,14 @@ class RouteBase {
 
   deleteOneHandler(req, response, next) {
     logger.info("DELETE " + req.originalUrl + " id: " + req.params.id + ")");
-    if (req.docs.active === false) {
-      logger.info({"code" : 200, "message" : "Document already deleted"});
-      return response.status(200).send({"code" : 200, "message" : "Document already deleted"});
-    } else {
-      this.ctrl.update({_id:req.docs._id.toString()}, (err, res) => {
-        if (err) {
-          logger.error(err);
-          return response.status(err.code || 500).send(err);
-        }
-        logger.info({"response" : "ok", "code" : 200});
-        return response.status(200).send(res);
-      });
-    }
+    this.ctrl.removeOnePromise(req.params.id).then(res => {
+      logger.info("document successfully deleted");
+      return response.status(200).send({"status":"ok"});
+    })
+    .catch(err => {
+      logger.error(err);
+      return response.status(err.code || 500).send(err);
+    });
   }
 
   post() {

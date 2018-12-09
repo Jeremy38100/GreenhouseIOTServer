@@ -160,6 +160,17 @@ class EntityBase {
     this.dao.remove(params, cb);
   }
 
+  removeOnePromise(id) {
+    let q = Q.defer();
+    logger.info("[" + this.name + ".baseController] removeOnePromise");
+    logger.info(id);
+    this.dao.remove({_id: id}, (err, res) => {
+      if (err) q.reject(err);
+      else q.resolve(res);
+    });
+    return q.promise;
+  }
+
   public(entity, host, cb) {
     logger.debug("[" + this.name + ".baseController] public");
     logger.debug(JSON.stringify(entity));
