@@ -54,6 +54,7 @@ describe('#messaging', () => {
   it('#should create a web socket client', (done) => {
     socketClient = io.connect('ws://' + config.host + ':' + config.port);
     socketClient.on('connect', () => {
+      console.log("connected");
       done();
     });
     socketClient.on('disconnect', () => {
@@ -112,6 +113,11 @@ describe('#messaging', () => {
       });
     }, 500);
 
+  });
+
+  it('#should disconnect the web socket client', (done) => {
+    socketClient.close();
+    done();
   });
 
   after((done) => {
