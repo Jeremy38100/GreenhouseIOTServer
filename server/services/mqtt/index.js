@@ -1,17 +1,19 @@
 'use strict';
 
-const mqtt = require('mqtt');
-const mongoose = require('mongoose');
-const logger = require('../../logger');
-const _ = require('underscore');
-const config = require('../../config');
-const DeviceDataCtrl = require('../../entities/devicedata/controller');
+const mqtt            = require('mqtt');
+const mongoose        = require('mongoose');
+const logger          = require('../../logger');
+const _               = require('underscore');
+const config          = require('../../config');
+const DeviceDataCtrl  = require('../../entities/devicedata/controller');
+const push            = require('../push');
 
 class MQTT {
   
   constructor() {
     this.interval = null;
     this.deviceDataCtrl = new DeviceDataCtrl(mongoose);
+    this.pushAlreadyTriggered = false;
   }
 
   listen(ws) {
@@ -27,7 +29,7 @@ class MQTT {
             logger.error("Mqtt client could not subscribe to the topic " + config.mqttProd.mainTopic, err);
           }
           // Uncomment this lines if you want to test the publish method with the socket
-          // this.publishEach(60);
+          this.publishEach(10);
         });
       });
       this.client.on('message', (topic, message) => {
@@ -64,6 +66,12 @@ class MQTT {
       this.ws.connections.forEach(connection => {
         this.ws.send(connection.socket, JSON.stringify(deviceData));
       });
+      if (deviceData.data.humidity && deviceData.data.humidity > 800 && !this.pushAlreadyTriggered) {
+        this.sendPush();
+        this.pushAlreadyTriggered = true;
+      } else {
+        this.pushAlreadyTriggered = false;
+      }
     } else {
       logger.warn("No data received");
     }
@@ -83,7 +91,7 @@ class MQTT {
   publishEach(seconds) {
     this.interval = setInterval(() => {
       this.client.publish(config.mqttProd.dataTopic + '/humidite/humidity', JSON.stringify({
-        humidity: Math.round(Math.random() * 30 + 30)
+        humidity: 900
       }));
     }, seconds * 1000); // Convert seconds into milliseconds
   }
@@ -93,6 +101,14 @@ class MQTT {
       this.client.end(true, () => {
         resolve();
       });
+    });
+  }
+
+  sendPush() {
+    push.sendPushNotification((err, res, body) => {
+      if (err) return logger.error(err);
+      logger.info("Successfully notified with push");
+      logger.info(body);
     });
   }
 

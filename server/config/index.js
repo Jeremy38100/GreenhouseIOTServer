@@ -21,5 +21,9 @@ module.exports = {
     port: 1883,
     mainTopic: 'etud21/data/#',
     dataTopic: 'etud21/data'
+  },
+  firebase: {
+    url: 'https://fcm.googleapis.com',
+    apiKey: 'AAAAITfmtAM:APA91bFiRHoGTpEeFsEerVamDfi2XbPbYRPmBrI5rtVDSdc8eNmBgVmwV1jOPKcRSmRm-vkaObNkkBB-hQ9gPY04vcz_zm6xPVNyG3E9UPuVd6mnnJCw4FzOLM449a3tHqu-rf6PPp8f'
   }
 };
