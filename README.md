@@ -20,7 +20,7 @@ To install the project :
 
 - run `npm install`
 - run `npm run dev` 
-- The project will run on [http://localhost:8101](http://localhost:8101)
+- The project will run on [http://localhost:8102](http://localhost:8102)
 
 ___
 
