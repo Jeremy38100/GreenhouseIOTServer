@@ -1,0 +1,96 @@
+#%RAML 1.0
+title: public API of Cultive-Moi
+
+types:
+  DeviceData:
+    type: object
+    properties:
+      _id: string
+      __v: number
+      lastModifiedDate: string
+      createdDate: string
+      deviceId: string
+      sensor: string
+      data: object
+    example:
+      _id: 5b59958cca1da5081b0f6b07
+      __v: 0
+      lastModifiedDate: 2018-07-26T09:34:04.612Z
+      createdDate: 2018-07-26T09:34:04.612Z
+      deviceId: etud21
+      sensor: humidity
+      data: {
+        humidity: 44
+      }
+/api:
+  options:
+    description: Get all authorized methods of the API
+    responses:
+      200:
+        body:
+          application/json:
+            type: string
+            example:
+              value:
+                GET, POST, PUT, DELETE
+/api/deviceData:
+  get:
+    description: Get all device data
+    responses:
+      200:
+        body:
+          application/json:
+            type: array
+            example: |
+              [
+                {
+                  "_id": "5b59958cca1da5081b0f6b07"
+                  "__v": 0
+                  "lastModifiedDate": "2018-07-26T09:34:04.612Z"
+                  "createdDate": "2018-07-26T09:34:04.612Z"
+                  "deviceId": "etud21"
+                  "sensor": "humidity"
+                  "data": {
+                    "humidity": 44
+                  }
+                }
+              ]
+  post:
+    description: Create a device data 
+    responses: 
+      200:
+        body:
+          application/json:
+            type: DeviceData
+            example: |
+              {
+                "_id": "5b59958cca1da5081b0f6b07"
+                "__v": 0
+                "lastModifiedDate": "2018-07-26T09:34:04.612Z"
+                "createdDate": "2018-07-26T09:34:04.612Z"
+                "deviceId": "etud21"
+                "sensor": "humidity"
+                "data": {
+                  "humidity": 44
+                }
+              }
+/api/deviceData/last:
+  get:
+    description: Get last device data
+    responses:
+      200:
+        body:
+          application/json:
+            type: DeviceData
+            example: |
+              {
+                "_id": "5b59958cca1da5081b0f6b07"
+                "__v": 0
+                "lastModifiedDate": "2018-07-26T09:34:04.612Z"
+                "createdDate": "2018-07-26T09:34:04.612Z"
+                "deviceId": "etud21"
+                "sensor": "humidity"
+                "data": {
+                  "humidity": 44
+                }
+              }
