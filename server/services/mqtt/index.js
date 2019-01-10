@@ -66,7 +66,7 @@ class MQTT {
       this.ws.connections.forEach(connection => {
         this.ws.send(connection.socket, JSON.stringify(deviceData));
       });
-      if (deviceData.data.humidity && deviceData.data.humidity > 800 && !this.pushAlreadyTriggered) {
+      if (deviceData.data.humidity && deviceData.data.humidity < 300 && !this.pushAlreadyTriggered) {
         this.sendPush();
         this.pushAlreadyTriggered = true;
       } else {
