@@ -1,6 +1,6 @@
-# GreenhouseIOTServer
+# Cultive-Moi Server
 
-Server side of GreenhouseIOT App
+Server side of Cultive-Moi App
 
 ___
 
